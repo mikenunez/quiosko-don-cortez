@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  db:
+    image: postgres:9.6
+    env_file: .env
+    volumes:
+      - db_data_quioskocortez:/var/lib/postgresql/data/pgdata
+
+  web:
+    build: .
+    env_file: .env
+    command: python manage.py runserver 0.0.0.0:5000
+    volumes:
+      - ./code:/code
+    ports:
+      - "7000:5000"
+    depends_on:
+      - db
+
+volumes:
+  db_data_quioskocortez:
+    external: true
