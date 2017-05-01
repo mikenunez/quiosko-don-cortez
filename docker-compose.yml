@@ -2,6 +2,7 @@ version: "2"
 
 services:
   db:
+    restart: always
     image: postgres:9.6
     env_file: .env
     volumes:
