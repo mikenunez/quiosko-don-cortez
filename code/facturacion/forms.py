@@ -9,10 +9,6 @@ class FormCliente(forms.Form):
 	phone 		= forms.CharField(max_length=20,)
 	email 		= forms.EmailField(max_length=100,)
 
-	# class Meta:
-	# 	model = Cliente
-	# 	fields = ['ruc', 'firstname', 'lastname', 'phone', 'email',]
-
 
 class FormDocCabecera(forms.ModelForm):
 	class Meta:
@@ -21,10 +17,9 @@ class FormDocCabecera(forms.ModelForm):
 
 
 class FormDocDetalle(forms.Form):
-	imp 		= TablaCatalogo.objects.all()
 	cantidad 	= forms.IntegerField()
 	producto 	= forms.ModelChoiceField(queryset=Producto.objects.all())
 	precio_uni 	= forms.DecimalField(decimal_places=2, max_digits=6)
-	iva 		= forms.ModelChoiceField(queryset=TablaCatalogo.objects.all().values_list('value',flat=True))
+	# iva 		= forms.ModelChoiceField(queryset=TablaCatalogo.objects.all().values_list('value',flat=True))
 	descuento 	= forms.IntegerField()
 	precio_total= forms.DecimalField(decimal_places=2, max_digits=6)
