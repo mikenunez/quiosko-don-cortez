@@ -4,77 +4,102 @@ from django.views import View
 from django.views.generic.detail import DetailView
 from django.forms import formset_factory
 
-from .models import Cliente, Producto, DocumentoCabecera
+from .models import Cliente, Producto, DocumentoCabecera, DocumentoDetalle
 from .forms import FormDocCabecera, FormDocDetalle, FormCliente
 
 
 # Create your views here.
 class FacturacionPage(View):
-	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=1)
+	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
 	DocNumber		= DocumentoCabecera.objects.last()
 	if (DocNumber):
-		DocLast = split('-', DocNumber.doc_id)
-		DocLast = int(DocLast[2] + 1)
+		DocLast = DocNumber.doc_id.split('-')
+		DocLast = int(DocLast[2]) + 1
 		DocLast = str(DocLast).zfill(9)
 	else:
 		DocLast	= '1'.zfill(9)
 	DocLast			= "001-001-" + DocLast
+
+
+	def clientePopulate(self, *args, **kwargs):
+		qs_cliente = Cliente.objects.filter(ruc=kwargs['cliente']).first()
+		cliente = {
+			'ruc': qs_cliente.ruc,
+			'nombre': qs_cliente.firstname,
+			'apellido': qs_cliente.lastname,
+			'email': qs_cliente.email,
+			'phone': qs_cliente.phone
+		}
+		return cliente
+
+
+	def clienteNuevo(self, *args, **kwargs):
+		# print (kwargs['formCliente'].cleaned_data.get('ruc'))
+		obj, create = Cliente.objects.update_or_create(
+			ruc = kwargs['formCliente'].cleaned_data.get('ruc'),
+			defaults={
+				'firstname': kwargs['formCliente'].cleaned_data.get('firstname'),
+				'lastname': kwargs['formCliente'].cleaned_data.get('lastname'),
+				'phone': kwargs['formCliente'].cleaned_data.get('phone'),
+				'email': kwargs['formCliente'].cleaned_data.get('email'),
+				}
+			)
+		if create:
+			print ("nuevo-- ", create)
+		else:
+			print ("updated-- ", obj)
+		return obj
+
+		
+	def saveDetalles(self, *args, **kwargs):
+		detalle = DocumentoDetalle(
+			documento=kwargs['documento'],
+			producto=kwargs['formDet'].cleaned_data.get('producto'),
+			cantidad=kwargs['formDet'].cleaned_data.get('cantidad'),
+			)
+		return detalle
+
+
 	def get(self, request, *args, **kwargs):
 		formCliente	= FormCliente()
 		formDocCab 	= FormDocCabecera(initial={ 'doc_id': self.DocLast })
-		formDocDet 	= self.DocDetFormSet
+		formSetDocDet 	= self.DocDetFormSet
 		context = {
 			'title': '',
 			'description': '',
 			'formCliente': formCliente,
 			'formDocCab': formDocCab,
-			'formDocDet': formDocDet
+			'formSetDocDet': formSetDocDet
 		}
 		return render(request,"index.html",context)
+
 
 	def post(self, request, *args, **kwargs):
 		formCliente 	= FormCliente(request.POST)
 		formDocCab 		= FormDocCabecera(request.POST)
-		formDocDet 		= self.DocDetFormSet(request.POST)
+		formSetDocDet 	= self.DocDetFormSet(request.POST)
 		if (request.POST.get('cli_val')):
-			qs_cliente = Cliente.objects.filter(ruc=request.POST.get('cli_val')).first()
-			client = {
-				'ruc': qs_cliente.ruc,
-				'nombre': qs_cliente.firstname,
-				'apellido': qs_cliente.lastname,
-				'email': qs_cliente.email,
-				'phone': qs_cliente.phone
-			}
-			return JsonResponse(client)
+			cliente = self.clientePopulate(cliente=request.POST.get('cli_val'))
+			return JsonResponse(cliente)
 		else:
-			cliente_id = ""
 			if formCliente.is_valid():
-				obj, create = Cliente.objects.update_or_create(
-					ruc = formCliente.cleaned_data.get('ruc'),
-					defaults={
-						'firstname': formCliente.cleaned_data.get('firstname'),
-						'lastname': formCliente.cleaned_data.get('lastname'),
-						'phone': formCliente.cleaned_data.get('phone'),
-						'email': formCliente.cleaned_data.get('email'),
-						}
-					)
-				if create:
-					print ("nuevo-- ", create)
-				else:
-					print ("updated-- ", obj)
-
-				# existe = 'Cliente.objects.filter(ruc=instance.ruc).exists()'
-				# if (existe):
-				# 	print("client exist: ")
-				# else:
-				# 	print("new client: " )
-				# 	# instance.save()
-
+				cliente = self.clienteNuevo(formCliente=formCliente)
+			if formDocCab.is_valid():
+				doc_instance = formDocCab.save(commit=False)
+				doc_instance.cliente = cliente
+				doc_instance.save()
+				if formSetDocDet.is_valid():
+					for formDocDet in formSetDocDet:
+						if (formDocDet.cleaned_data.get('producto')):
+							detalle = self.saveDetalles(documento=doc_instance, formDet=formDocDet)
+							detalle.save()
 			context = {
 				'title': '',
 				'description': '',
 				'formCliente': formCliente,
 				'formDocCab': formDocCab,
-				'formDocDet': formDocDet
+				'formSetDocDet': formSetDocDet
 			}
 			return render(request,"index.html", context)
+
+	
