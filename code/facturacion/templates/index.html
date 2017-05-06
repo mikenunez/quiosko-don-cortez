@@ -1,2 +1,95 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% block pagecontent %}
+	<!-- Static navbar -->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Menu</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Quiosko Don Cortez</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="/">Inicio</a></li>
+					<li class="active"><a href="/facturacion">Facturacion</a></li>
+					<li><a href="#">Contact</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Nav header</li>
+							<li><a href="#">Separated link</a></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div><!--/.container-fluid -->
+	</nav>
+	<!-- Main component for a primary marketing message or call to action -->
+	<div class="page-header">
+		<h1>Modulo de  Facturación</h1>
+	</div>
+	<form id="documento-form" method="post" action="/facturacion">
+	{% csrf_token %}
+	<div  class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<h3>Cliente:</h3>
+			</div>
+				{{ formCliente|crispy }}
+			<input id="cli_upd" class="btn btn-primary" type="button" value="Actualizar">
+		</div>
+		<div class="col-md-6 ">
+			<div class="form-group">
+				<h3>QUIOSKO "DON CORTEZ"</h3>
+				<h3>RUC: 0998698415641541001</h3>
+				<h4>Fecha y Hora: {% now "d/m/Y H:i" %}</h4>
+				<h4>Numero de Autorización: 12498675165416468136461664694164417819891417886451</h4>
+				<h4>Direción Matriz: Aquisito nomas e/ bajadita y esquina</h4>
+			</div>
+				{{ formDocCab|crispy }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+				<h3>Detalle:</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table">
+				{{ formDocDet.management_form }}
+				{% for form in formDocDet %}
+					{% if forloop.first %}
+						<thead>
+							<tr>
+								{% for field in form.visible_fields %}
+									<th>{{ field.label|capfirst }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+					{% endif %}
+					<tr>
+						{% for field in form.visible_fields %}
+							<td>
+								{{ field }}
+							</td>
+						{% endfor %}
+					</tr>
+	 			{% endfor %}
+			</table>
+		</div>
+	</div>
+	<input class="btn btn-success" type="submit" value="Generar Doc.">
+	</form>
+{% endblock %}
