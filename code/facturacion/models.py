@@ -21,22 +21,6 @@ class Cliente(models.Model):
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
-class Producto(models.Model):
-	name 		= models.CharField(max_length=200, null=False, blank=False)
-	price 		= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
-	sale_price 	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
-	stock		= models.PositiveSmallIntegerField(null=True, blank=True)
-	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
-	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
-	
-	def __unicode__(self):
-		return str(self.name)
-
-	def __str__(self):
-		return str(self.name)
-
-
-@python_2_unicode_compatible  # only if you need to support Python 2
 class TablaCatalogo(models.Model):
 	code 		= models.CharField(max_length= 6, null=False, blank=False, unique=True)
 	description	= models.CharField(max_length= 50, null=False, blank=False,)
@@ -52,14 +36,30 @@ class TablaCatalogo(models.Model):
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
+class Producto(models.Model):
+	name 		= models.CharField(max_length=200, null=False, blank=False)
+	price 		= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
+	sale_price 	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
+	tablacatalogo = models.ForeignKey(TablaCatalogo)
+	stock		= models.PositiveSmallIntegerField(null=True, blank=True)
+	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
+	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
+	
+	def __unicode__(self):
+		return str(self.name)
+
+	def __str__(self):
+		return str(self.name)
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
 class DocumentoCabecera(models.Model):
 	ruc 		= models.CharField(max_length=15, default='0999999999001', null=False, blank=False)
 	doc_id 		= models.CharField(max_length= 17, null=False, blank=False, unique=True)
 	doc_type	= models.CharField(max_length=3,choices=(('-','-'),('Fac','Factura'),('Ret','Retencion'),('NC','Nota Credito'),),default='Fac',)
 	cliente		= models.ForeignKey(Cliente)
 	payment		= models.CharField(max_length=3,choices=(('-','-'),('Efe','Efectivo'),('Che','Cheque'),('Deb','Debito'),('Tar','Tarjeta'),),default='Efe',)
-	subtotal	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
-	tablacatalogo = models.ForeignKey(TablaCatalogo)
+	# subtotal	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
 	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	
@@ -73,7 +73,7 @@ class DocumentoCabecera(models.Model):
 @python_2_unicode_compatible  # only if you need to support Python 2
 class DocumentoDetalle(models.Model):
 	documento 	= models.ForeignKey(DocumentoCabecera)
-	produto		= models.ForeignKey(Producto)
+	producto	= models.ForeignKey(Producto)
 	cantidad	= models.PositiveSmallIntegerField(null=True, blank=True)
 	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
