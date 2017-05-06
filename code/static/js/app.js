@@ -14,6 +14,28 @@ $("#id_ruc").keypress(
 });
 
 
+/*$("#cli_upd").click(
+    function(){
+        $.ajax({
+		url: "/facturacion",
+		method: "POST",
+		data: { 
+			csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+			client_type: 'update',
+			client_ruc: $("#id_ruc").val(),
+			client_firstname: $("#id_firstname").val(),
+			client_lastname: $("#id_lastname").val(),
+			client_phone: $("#id_phone").val(),
+			client_email: $("#id_email").val(),
+			},
+		// dataType: "json",
+		})
+		.done(function( data ) {
+			console.log(data);
+		});
+});*/
+
+
 function popu_client(v) {
 	$.ajax({
 		url: "/facturacion",
