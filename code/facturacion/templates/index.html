@@ -47,7 +47,7 @@
 				<h3>Cliente:</h3>
 			</div>
 				{{ formCliente|crispy }}
-			<input id="cli_upd" class="btn btn-primary" type="button" value="Actualizar">
+			<!-- <input id="cli_upd" class="btn btn-primary" type="button" value="Actualizar o Crear"> -->
 		</div>
 		<div class="col-md-6 ">
 			<div class="form-group">
@@ -68,8 +68,8 @@
 	<div class="row">
 		<div class="table-responsive">
 			<table class="table">
-				{{ formDocDet.management_form }}
-				{% for form in formDocDet %}
+				{{ formSetDocDet.management_form }}
+				{% for form in formSetDocDet %}
 					{% if forloop.first %}
 						<thead>
 							<tr>
