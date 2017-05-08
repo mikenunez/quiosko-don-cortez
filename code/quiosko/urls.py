@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'facturacion', include('facturacion.urls')),
+    url(r'^reporte', include('reporte.urls')),
 ] 
 
 if settings.DEBUG:
