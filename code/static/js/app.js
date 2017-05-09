@@ -1,3 +1,48 @@
+// FUNTIONS
+var totals = [[],[],[],[],[],[],[],[],[],[]];
+function makethemath(u){
+	camp = u;
+	camp = camp.split("-");
+	camp = camp[1];
+	subtotal = 0.00;
+	descuentos = 0.00;
+	iva = 0.00;
+	total = 0.00;
+	prod_cant = parseInt($('#id_form-' + camp + '-cantidad').val(), 10);
+	prod_p_u = parseFloat($('#id_form-' + camp + '-precio_uni').val()).toFixed(2);
+	prod_iva = parseFloat($('#id_form-' + camp + '-iva').find(":selected").text());
+	prod_iva = parseFloat(prod_iva/100).toFixed(2);
+	
+	totals[camp][0] = parseFloat(prod_cant * prod_p_u).toFixed(2);
+	totals[camp][1]	= parseFloat($('#id_form-' + camp + '-descuento').val()).toFixed(2);
+	totals[camp][0] = parseFloat(totals[camp][0]) - parseFloat(totals[camp][1]);
+	totals[camp][2]	= parseFloat(totals[camp][0]).toFixed(2) * parseFloat(prod_iva).toFixed(2);
+	totals[camp][3]	= parseFloat(totals[camp][0]) + parseFloat(totals[camp][2]);
+	if (!isNaN(totals[camp][3]))
+	{
+		$('#id_form-' + camp + '-precio_total').val(totals[camp][0]);
+		for (var i = 0; i < 10; i++)
+		{
+			if (!isNaN(totals[i][3]))
+			{
+				subtotal 	= parseFloat(subtotal) + parseFloat(totals[i][0]);
+				descuentos 	= parseFloat(descuentos) + parseFloat(totals[i][1]);
+				iva 		= parseFloat(iva) + parseFloat(totals[i][2]);
+				total 		= parseFloat(total) + parseFloat(totals[i][3]);
+			}
+		}
+		$("#totales-subtotal-sin-imp").html(parseFloat(subtotal).toFixed(2));
+		$("#totales-subtotal-14").html(parseFloat(subtotal).toFixed(2));
+		$("#totales-subtotal-0").html('0.00');
+		$("#totales-descuentos").html(parseFloat(descuentos).toFixed(2));
+		$("#totales-ice").html('0.00');
+		$("#totales-iva-14").html(parseFloat(iva).toFixed(2));
+		$("#id_iva").val(parseFloat(iva).toFixed(2));
+		$("#totales-total").html(parseFloat(total).toFixed(2));
+	}
+}
+
+
 $("form").keypress(
     function(event){
      if (event.which == '13') {
@@ -14,61 +59,15 @@ $("#id_ruc").keypress(
 });
 
 
-$("tr > td > input").on('input',
-	function(){
-		camp = $(this).attr('id');
-		camp = camp.split("-");
-		camp = camp[1];
-		subtotal = 0.00;
-		descuentos = 0.00;
-		producto_cantidad = parseFloat($('#id_form-' + camp + '-cantidad').val()).toFixed(2);
-		producto_precio_unitario = parseFloat($('#id_form-' + camp + '-precio_uni').val()).toFixed(2);
-		producto_descuento = parseFloat($('#id_form-' + camp + '-descuento').val()).toFixed(2);
-		producto_precio_total = parseFloat((producto_cantidad * producto_precio_unitario) - producto_descuento).toFixed(2);
-		if (producto_precio_total)
-		{
-			$('#id_form-' + camp + '-precio_total').val(producto_precio_total);
-			for (var i = 0; i < 10; i++) 
-			{
-				if ($('#id_form-' + i + '-precio_total').val())
-				{
-					subtotal = parseFloat(subtotal) + parseFloat($('#id_form-' + i + '-precio_total').val());
-					descuentos = parseFloat(descuentos) + parseFloat($('#id_form-' + i + '-descuento').val());
-					console.log(i);
-				}
-			}
-			$("#totales-subtotal-sin-imp").html(parseFloat(subtotal).toFixed(2));
-			$("#totales-subtotal-14").html(parseFloat(subtotal).toFixed(2));
-			$("#totales-subtotal-0").html('0.00');
-			$("#totales-descuentos").html(parseFloat(descuentos).toFixed(2));
-			$("#totales-ice").html('0.00');
-			$("#totales-iva-14").html(parseFloat(subtotal * 0.14).toFixed(2));
-			$("#totales-total").html(parseFloat((subtotal - descuentos) + (subtotal * 0.14)).toFixed(2));
-		}
-	}
-);
+
+$("tr > td > select").change(function(){   
+	makethemath($(this).attr('id'));
+});
 
 
-/*$("#cli_upd").click(
-    function(){
-        $.ajax({
-		url: "/facturacion",
-		method: "POST",
-		data: { 
-			csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-			client_type: 'update',
-			client_ruc: $("#id_ruc").val(),
-			client_firstname: $("#id_firstname").val(),
-			client_lastname: $("#id_lastname").val(),
-			client_phone: $("#id_phone").val(),
-			client_email: $("#id_email").val(),
-			},
-		// dataType: "json",
-		})
-		.done(function( data ) {
-			console.log(data);
-		});
-});*/
+$("tr > td > input").on('input',function(){ 
+	makethemath($(this).attr('id'));
+});
 
 
 function popu_client(v) {
