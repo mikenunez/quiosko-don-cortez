@@ -11,14 +11,16 @@ from .forms import FormDocCabecera, FormDocDetalle, FormCliente
 # Create your views here.
 class FacturacionPage(View):
 	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
-	DocNumber		= DocumentoCabecera.objects.last()
-	if (DocNumber):
-		DocLast = DocNumber.doc_id.split('-')
-		DocLast = int(DocLast[2]) + 1
-		DocLast = str(DocLast).zfill(9)
-	else:
+	try:
+		DocNumber	= DocumentoCabecera.objects.last()
+		DocLast 	= DocNumber.doc_id.split('-')
+		DocLast 	= int(DocLast[2]) + 1
+		DocLast 	= str(DocLast).zfill(9)
+		DocLast		= "001-001-" + DocLast
+		
+	except:
 		DocLast	= '1'.zfill(9)
-	DocLast			= "001-001-" + DocLast
+		DocLast	= "001-001-" + DocLast
 
 
 	def clientePopulate(self, *args, **kwargs):
@@ -56,6 +58,8 @@ class FacturacionPage(View):
 			documento=kwargs['documento'],
 			producto=kwargs['formDet'].cleaned_data.get('producto'),
 			cantidad=kwargs['formDet'].cleaned_data.get('cantidad'),
+			descuento=kwargs['formDet'].cleaned_data.get('descuento'),
+			tablacatalogo=kwargs['formDet'].cleaned_data.get('iva'),
 			)
 		return detalle
 
@@ -88,11 +92,16 @@ class FacturacionPage(View):
 				doc_instance = formDocCab.save(commit=False)
 				doc_instance.cliente = cliente
 				doc_instance.save()
-				if formSetDocDet.is_valid():
-					for formDocDet in formSetDocDet:
-						if (formDocDet.cleaned_data.get('producto')):
+				det = 0
+				for formDocDet in formSetDocDet:
+					if formDocDet.is_valid():
+						if (formDocDet.cleaned_data.get('cantidad') or formDocDet.cleaned_data.get('precio_total')):
 							detalle = self.saveDetalles(documento=doc_instance, formDet=formDocDet)
 							detalle.save()
+							det = det + 1
+				if (det == 0):
+					doc_instance.delete()
+
 			context = {
 				'title': '',
 				'description': '',
