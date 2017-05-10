@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
@@ -9,7 +10,9 @@ from .forms import FormDocCabecera, FormDocDetalle, FormCliente
 
 
 # Create your views here.
-class FacturacionPage(View):
+class FacturacionPage(LoginRequiredMixin, View):
+	login_url = '/login'
+
 	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
 	try:
 		DocNumber	= DocumentoCabecera.objects.last()
