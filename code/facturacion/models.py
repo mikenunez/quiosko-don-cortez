@@ -55,8 +55,8 @@ class Producto(models.Model):
 @python_2_unicode_compatible  # only if you need to support Python 2
 class DocumentoCabecera(models.Model):
 	ruc 		= models.CharField(max_length=15, default='0999999999001', null=False, blank=False)
-	doc_id 		= models.CharField(max_length= 17, null=False, blank=False, unique=True)
-	doc_type	= models.CharField(max_length=3,choices=(('-','-'),('Fac','Factura'),('Ret','Retencion'),('NC','Nota Credito'),),default='Fac',)
+	docid 		= models.CharField(max_length= 17, null=False, blank=False, unique=True)
+	doctype		= models.CharField(max_length=3,choices=(('-','-'),('Fac','Factura'),('Ret','Retencion'),('NC','Nota Credito'),),default='Fac',)
 	cliente		= models.ForeignKey(Cliente)
 	payment		= models.CharField(max_length=3,choices=(('-','-'),('Efe','Efectivo'),('Che','Cheque'),('Deb','Debito'),('Tar','Tarjeta'),),default='Efe',)
 	iva			= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
@@ -64,10 +64,10 @@ class DocumentoCabecera(models.Model):
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	
 	def __unicode__(self):
-		return str(self.doc_id)
+		return str(self.docid)
 
 	def __str__(self):
-		return str(self.doc_id)
+		return str(self.docid)
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
@@ -77,6 +77,7 @@ class DocumentoDetalle(models.Model):
 	tablacatalogo = models.ForeignKey(TablaCatalogo)
 	cantidad	= models.PositiveSmallIntegerField(null=False, blank=False)
 	descuento	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)], default='0.00')
+	subtotal	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)], default='0.00')
 	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	

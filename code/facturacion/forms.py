@@ -13,7 +13,7 @@ class FormCliente(forms.Form):
 class FormDocCabecera(forms.ModelForm):
 	class Meta:
 		model = DocumentoCabecera
-		fields = ['doc_id', 'doc_type', 'payment', 'iva',]
+		fields = ['docid', 'doctype', 'payment', 'iva',]
 		widgets = {
 			'iva': forms.TextInput(attrs={'readonly':'readonly'}),
 		}
@@ -25,4 +25,4 @@ class FormDocDetalle(forms.Form):
 	precio_uni 	= forms.DecimalField(decimal_places=2, max_digits=6, label='Precio Unit.', disabled=False)
 	iva			= forms.ModelChoiceField(queryset=TablaCatalogo.objects.all(), to_field_name="code", label='IVA %', required=True, initial='010100')
 	descuento 	= forms.DecimalField(initial=0.00, decimal_places=2, max_digits=6)
-	precio_total= forms.DecimalField(decimal_places=2, max_digits=6, disabled=False)
+	subtotal	= forms.DecimalField(decimal_places=2, max_digits=6, disabled=False, widget=forms.TextInput(attrs={'readonly':'readonly'}))

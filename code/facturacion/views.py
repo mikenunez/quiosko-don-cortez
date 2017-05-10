@@ -13,7 +13,7 @@ class FacturacionPage(View):
 	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
 	try:
 		DocNumber	= DocumentoCabecera.objects.last()
-		DocLast 	= DocNumber.doc_id.split('-')
+		DocLast 	= DocNumber.docid.split('-')
 		DocLast 	= int(DocLast[2]) + 1
 		DocLast 	= str(DocLast).zfill(9)
 		DocLast		= "001-001-" + DocLast
@@ -58,15 +58,16 @@ class FacturacionPage(View):
 			documento=kwargs['documento'],
 			producto=kwargs['formDet'].cleaned_data.get('producto'),
 			cantidad=kwargs['formDet'].cleaned_data.get('cantidad'),
-			descuento=kwargs['formDet'].cleaned_data.get('descuento'),
 			tablacatalogo=kwargs['formDet'].cleaned_data.get('iva'),
+			descuento=kwargs['formDet'].cleaned_data.get('descuento'),
+			subtotal=kwargs['formDet'].cleaned_data.get('subtotal'),
 			)
 		return detalle
 
 
 	def get(self, request, *args, **kwargs):
 		formCliente	= FormCliente()
-		formDocCab 	= FormDocCabecera(initial={ 'doc_id': self.DocLast })
+		formDocCab 	= FormDocCabecera(initial={ 'docid': self.DocLast })
 		formSetDocDet 	= self.DocDetFormSet
 		context = {
 			'title': '',
@@ -75,7 +76,7 @@ class FacturacionPage(View):
 			'formDocCab': formDocCab,
 			'formSetDocDet': formSetDocDet
 		}
-		return render(request,"index.html",context)
+		return render(request,"facturacion.html",context)
 
 
 	def post(self, request, *args, **kwargs):
@@ -93,12 +94,16 @@ class FacturacionPage(View):
 				doc_instance.cliente = cliente
 				doc_instance.save()
 				det = 0
+				print ("valid: ", formDocCab )
 				for formDocDet in formSetDocDet:
+					if not formDocDet.is_valid():
+						print ("NOOO VALID: ", formDocDet )
 					if formDocDet.is_valid():
-						if (formDocDet.cleaned_data.get('cantidad') or formDocDet.cleaned_data.get('precio_total')):
+						if (formDocDet.cleaned_data.get('cantidad') or formDocDet.cleaned_data.get('subtotal')):
 							detalle = self.saveDetalles(documento=doc_instance, formDet=formDocDet)
 							detalle.save()
 							det = det + 1
+							print ("########## : ", det )
 				if (det == 0):
 					doc_instance.delete()
 
@@ -109,6 +114,6 @@ class FacturacionPage(View):
 				'formDocCab': formDocCab,
 				'formSetDocDet': formSetDocDet
 			}
-			return render(request,"index.html", context)
+			return render(request,"facturacion.html", context)
 
 	
