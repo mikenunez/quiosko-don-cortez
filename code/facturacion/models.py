@@ -14,10 +14,10 @@ class Cliente(models.Model):
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	
 	def __unicode__(self):
-		return str(self.email)
+		return str(self.ruc)
 
 	def __str__(self):
-		return str(self.email)
+		return str(self.ruc)
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
@@ -29,10 +29,10 @@ class TablaCatalogo(models.Model):
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	
 	def __unicode__(self):
-		return str(self.description)
+		return str(self.value)
 
 	def __str__(self):
-		return str(self.description)
+		return str(self.value)
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
@@ -59,7 +59,7 @@ class DocumentoCabecera(models.Model):
 	doc_type	= models.CharField(max_length=3,choices=(('-','-'),('Fac','Factura'),('Ret','Retencion'),('NC','Nota Credito'),),default='Fac',)
 	cliente		= models.ForeignKey(Cliente)
 	payment		= models.CharField(max_length=3,choices=(('-','-'),('Efe','Efectivo'),('Che','Cheque'),('Deb','Debito'),('Tar','Tarjeta'),),default='Efe',)
-	# subtotal	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
+	iva			= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
 	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	
@@ -72,9 +72,11 @@ class DocumentoCabecera(models.Model):
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class DocumentoDetalle(models.Model):
-	documento 	= models.ForeignKey(DocumentoCabecera)
+	documento	= models.ForeignKey(DocumentoCabecera)
 	producto	= models.ForeignKey(Producto)
-	cantidad	= models.PositiveSmallIntegerField(null=True, blank=True)
+	tablacatalogo = models.ForeignKey(TablaCatalogo)
+	cantidad	= models.PositiveSmallIntegerField(null=False, blank=False)
+	descuento	= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)], default='0.00')
 	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
 	updated		= models.DateTimeField(auto_now=True, auto_now_add=False)
 	
