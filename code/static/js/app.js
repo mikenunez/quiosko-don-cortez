@@ -20,7 +20,7 @@ function makethemath(u){
 	totals[camp][3]	= parseFloat(totals[camp][0]) + parseFloat(totals[camp][2]);
 	if (!isNaN(totals[camp][3]))
 	{
-		$('#id_form-' + camp + '-precio_total').val(totals[camp][0]);
+		$('#id_form-' + camp + '-precio_total').val(parseFloat(totals[camp][0]).toFixed(2));
 		for (var i = 0; i < 10; i++)
 		{
 			if (!isNaN(totals[i][3]))
