@@ -12,16 +12,20 @@
 				<th># Factura</th>
 				<th>Fecha</th>
 				<th>Cliente</th>
+				<th>Tipo Pago</th>
+				<th>Iva</th>
 				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for factura in facturas %}
+			{% for factura in object_list %}
 			<tr>
-				<td>{{ factura.doc_id }}</td>
+				<td>{{ factura.docid }}</td>
 				<td>{{ factura.created }}</td>
 				<td>{{ factura.cliente }}</td>
-				<td>{{ factura.created }}</td>
+				<td>{{ factura.get_payment_display }}</td>
+				<td>{{ factura.iva }}</td>
+				<td>{{ factura.documentodetalle__subtotal__sum }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
