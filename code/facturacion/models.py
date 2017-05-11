@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.utils.encoding import python_2_unicode_compatible # only if you need to support Python 2
 # Create your models here.
@@ -54,10 +55,11 @@ class Producto(models.Model):
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class DocumentoCabecera(models.Model):
+	seller		= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	cliente		= models.ForeignKey(Cliente)
 	ruc 		= models.CharField(max_length=15, default='0999999999001', null=False, blank=False)
 	docid 		= models.CharField(max_length= 17, null=False, blank=False, unique=True)
 	doctype		= models.CharField(max_length=3,choices=(('-','-'),('Fac','Factura'),('Ret','Retencion'),('NC','Nota Credito'),),default='Fac',)
-	cliente		= models.ForeignKey(Cliente)
 	payment		= models.CharField(max_length=3,choices=(('-','-'),('Efe','Efectivo'),('Che','Cheque'),('Deb','Debito'),('Tar','Tarjeta'),),default='Efe',)
 	iva			= models.DecimalField(decimal_places=2, max_digits=20, validators=[MinValueValidator(0)])
 	created		= models.DateTimeField(auto_now=False, auto_now_add=True)
