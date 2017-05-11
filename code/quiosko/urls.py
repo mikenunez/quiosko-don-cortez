@@ -22,6 +22,7 @@ from django.conf import settings
 from .views import LoginPage, LogoutPage
 
 urlpatterns = [
+    url(r'^$', LoginPage.as_view(), name='accesar'),
     url(r'^admin/', admin.site.urls),
     url(r'^login$', LoginPage.as_view(), name='accesar'),
     url(r'^logout$', LogoutPage.as_view(), name='accesar'),
