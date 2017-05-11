@@ -10,7 +10,7 @@
 		<thead>
 			<tr>
 				<th># Factura</th>
-				<th>Fecha</th>
+				<th>Vendedor</th>
 				<th>Cliente</th>
 				<th>Tipo Pago</th>
 				<th>Iva</th>
@@ -21,7 +21,7 @@
 			{% for factura in object_list %}
 			<tr>
 				<td>{{ factura.docid }}</td>
-				<td>{{ factura.created }}</td>
+				<td>{{ factura.seller }}</td>
 				<td>{{ factura.cliente }}</td>
 				<td>{{ factura.get_payment_display }}</td>
 				<td>{{ factura.iva }}</td>
