@@ -43,7 +43,7 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 		return render(request,"reporte_diario.html",context)
 		
 
-class ReporteDiario2PDF(View):
+class ReporteDiario2PDF(LoginRequiredMixin, View):
 	fecha 		= datetime.today()
 
 	def get(self, request, *args, **kwargs):
