@@ -95,6 +95,7 @@ class FacturacionPage(LoginRequiredMixin, View):
 			if formDocCab.is_valid():
 				doc_instance = formDocCab.save(commit=False)
 				doc_instance.cliente = cliente
+				doc_instance.seller = request.user
 				doc_instance.save()
 				det = 0
 				print ("valid: ", formDocCab )
