@@ -43,7 +43,7 @@ function makethemath(u){
 }
 
 
-$("form").keypress(
+$("#documento-form").keypress(
     function(event){
      if (event.which == '13') {
         event.preventDefault();
