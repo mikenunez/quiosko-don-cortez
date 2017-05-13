@@ -34,11 +34,12 @@
 				<td>{{ factura.seller }}</td>
 				<td>{{ factura.cliente }}</td>
 				<td>{{ factura.get_payment_display }}</td>
-				<td>{{ factura.total1 }}</td>
-				<td>{{ factura.iva }}</td>
-				<td>{{ factura.total2 }}</td>
+				<td class="totales">{{ factura.total1 }}</td>
+				<td class="totales">{{ factura.iva }}</td>
+				<td class="totales">{{ factura.total2 }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+	<p class="text-right"> <strong>Total en ventas en el día: ${{ totaldia }} </strong></p>
 {% endblock %}

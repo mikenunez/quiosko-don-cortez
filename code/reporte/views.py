@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.utils.timezone import datetime
 from django.views import View
 
+from decimal import *
 from facturacion.models import DocumentoCabecera, DocumentoDetalle
 from .forms import FormReporteDiario
 
@@ -17,7 +18,7 @@ from xhtml2pdf import pisa
 class ReporteDiarioPage(LoginRequiredMixin, View):
 	login_url 	= '/login'
 	fecha 		= datetime.today()
-
+	totaldia = Decimal('0.00')
 	def get(self, request, *args, **kwargs):
 		form	= FormReporteDiario()
 		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
@@ -25,11 +26,14 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 			).annotate(
 			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
 			)
+		for ventasdia in qs:
+			self.totaldia = self.totaldia + ventasdia.total2
 		context = {
 			'title': '',
 			'description': '',
 			'form': form,
-			'facturas': qs
+			'facturas': qs,
+			'totaldia': self.totaldia
 		}
 		return render(request,"reporte_diario.html",context)
 
@@ -42,11 +46,14 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 			).annotate(
 			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
 			)
+		for ventasdia in qs:
+			self.totaldia = self.totaldia + ventasdia.total2
 		context = {
 			'title': '',
 			'description': '',
 			'form': form,
-			'facturas': qs
+			'facturas': qs,
+			'totaldia': self.totaldia
 		}
 		return render(request,"reporte_diario.html",context)
 		
@@ -54,6 +61,7 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 class ReporteDiario2PDF(LoginRequiredMixin, View):
 	login_url 	= '/login'
 	fecha 		= datetime.today()
+	totaldia = Decimal('0.00')
 
 	def get(self, request, *args, **kwargs):
 	# Prepare context
@@ -64,11 +72,14 @@ class ReporteDiario2PDF(LoginRequiredMixin, View):
 			).annotate(
 			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
 			)
+		for ventasdia in qs:
+			self.totaldia = self.totaldia + ventasdia.total2
 		context = {
 			'title': '',
 			'description': '',
 			'fecha': self.fecha,
 			'user': request.user,
+			'totaldia': self.totaldia,
 			'facturas': qs
 		}
 		# Render html content through html template with context

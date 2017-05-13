@@ -8,7 +8,7 @@
         size: letter landscape;
         margin: 2cm;
     }
-	html{font-family:sans-serif;font-size:10px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}table{border-spacing:0;border-collapse:collapse}td,th{padding:0}thead{display:table-header-group}tr{page-break-inside:avoid}h2,h3{orphans:3;widows:3}h2,h3{page-break-after:avoid}.table{border-collapse:collapse !important;background-color:transparent}body{font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}h2,h3,h5{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h2,h3{margin-top:20px;margin-bottom:10px}h5{margin-top:10px;margin-bottom:10px}h2{font-size:30px}h3{font-size:24px}h5{font-size:14px}.text-right{text-align:right}.text-center{text-align:center}.page-header{padding-bottom:9px;margin:40px 0 20px;border-bottom:1px solid #eee}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}th{text-align:left}.table{width:100%;max-width:100%;margin-bottom:20px}.table>tbody>tr>td,.table>thead>tr>th{padding:8px;line-height:1.42857143;vertical-align:top;border-top:1px solid #ddd}.table>thead>tr>th{vertical-align:bottom;border-bottom:2px solid #ddd}.table>thead:first-child>tr:first-child>th{border-top:0}.table-striped>tbody>tr:nth-of-type(odd){background-color:#f9f9f9}.container:after,.container:before{display:table;content:" "}.container:after{clear:both}
+	html{font-family:sans-serif;font-size:10px;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{margin:0}table{border-spacing:0;border-collapse:collapse}td,th{padding:0}thead{display:table-header-group}tr{page-break-inside:avoid}h2,h3{orphans:3;widows:3}h2,h3{page-break-after:avoid}.table{border-collapse:collapse !important;background-color:transparent}body{font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}h2,h3,h5{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}h2,h3{margin-top:20px;margin-bottom:10px}h5{margin-top:10px;margin-bottom:10px}h2{font-size:30px}h3{font-size:24px}h5{font-size:14px}.text-right{text-align:right}.text-center{text-align:center}.page-header{padding-bottom:9px;margin:40px 0 20px;border-bottom:1px solid #eee}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}table{background-color:transparent}th{text-align:left}.table{width:100%;max-width:100%;margin-bottom:20px}.table>tbody>tr>td,.table>thead>tr>th{padding:8px;line-height:1.42857143;vertical-align:top;border-top:1px solid #ddd}.table>thead>tr>th{vertical-align:bottom;border-bottom:2px solid #ddd}.table>thead:first-child>tr:first-child>th{border-top:0}.table-striped>tbody>tr:nth-of-type(odd){background-color:#f9f9f9}.container:after,.container:before{display:table;content:" "}.container:after{clear:both}.totales::before{content: "$";}
 	</style>
 </head>
 <body>
@@ -21,7 +21,7 @@
 	<thead>
 		<tr>
 			<th># Factura</th>
-			<th>Vendedor</th>
+			<th class="text-center">Vendedor</th>
 			<th>Cliente</th>
 			<th>Tipo Pago</th>
 			<th>Subotal</th>
@@ -33,16 +33,17 @@
 		{% for factura in facturas %}
 		<tr>
 			<td>{{ factura.docid }}</td>
-			<td>{{ factura.seller }}</td>
+			<td class="text-center">{{ factura.seller }}</td>
 			<td>{{ factura.cliente }}</td>
 			<td>{{ factura.get_payment_display }}</td>
-			<td>{{ factura.total1 }}</td>
-			<td>{{ factura.iva }}</td>
-			<td>{{ factura.total2 }}</td>
+			<td>${{ factura.total1 }}</td>
+			<td>${{ factura.iva }}</td>
+			<td>${{ factura.total2 }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+<p class="text-right"> <strong>Total en ventas en el día: ${{ totaldia }} </strong></p>
 <h5 class="text-right">Generado por: {{ user }}</h5>
 <h5 class="text-right">Fecha: {% now "d/m/Y H:i" %}</h5>
 </div>
