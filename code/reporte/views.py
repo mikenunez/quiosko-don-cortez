@@ -33,7 +33,11 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 		form	= FormReporteDiario(request.POST)
 		if form.is_valid():
 			self.fecha = form.cleaned_data.get('fecha')
-		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(Sum(F('documentodetalle__subtotal')))
+		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
+			total1=Sum(F('documentodetalle__subtotal'))
+			).annotate(
+			total2=Sum(F('iva')+F('documentodetalle__subtotal'))
+			)
 		context = {
 			'title': '',
 			'description': '',
@@ -51,7 +55,11 @@ class ReporteDiario2PDF(LoginRequiredMixin, View):
 	# Prepare context
 		if request.GET.get('fecha'):
 			self.fecha = request.GET.get('fecha')
-		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(Sum(F('documentodetalle__subtotal')))
+		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
+			total1=Sum(F('documentodetalle__subtotal'))
+			).annotate(
+			total2=Sum(F('iva')+F('documentodetalle__subtotal'))
+			)
 		context = {
 			'title': '',
 			'description': '',

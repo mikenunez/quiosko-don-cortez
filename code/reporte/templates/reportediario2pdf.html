@@ -24,6 +24,7 @@
 			<th>Vendedor</th>
 			<th>Cliente</th>
 			<th>Tipo Pago</th>
+			<th>Subotal</th>
 			<th>Iva</th>
 			<th>Total</th>
 		</tr>
@@ -35,8 +36,9 @@
 			<td>{{ factura.seller }}</td>
 			<td>{{ factura.cliente }}</td>
 			<td>{{ factura.get_payment_display }}</td>
+			<td>{{ factura.total1 }}</td>
 			<td>{{ factura.iva }}</td>
-			<td>{{ factura.documentodetalle__subtotal__sum }}</td>
+			<td>{{ factura.total2 }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
