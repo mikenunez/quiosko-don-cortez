@@ -5,3 +5,7 @@ text-align:right;
 .totales::before  {
 	content: "$";
 }
+
+table > tbody > tr > td > input {
+	text-align: right;
+}

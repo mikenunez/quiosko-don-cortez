@@ -37,6 +37,13 @@ class FacturacionPage(LoginRequiredMixin, View):
 		}
 		return cliente
 
+	def precioPopulate(self, *args, **kwargs):
+		qs_precio = Producto.objects.filter(pk=kwargs['producto']).first()
+		precio = {
+			'precio': qs_precio.sale_price,
+		}
+		print(qs_precio)
+		return precio
 
 	def clienteNuevo(self, *args, **kwargs):
 		# print (kwargs['formCliente'].cleaned_data.get('ruc'))
@@ -89,6 +96,9 @@ class FacturacionPage(LoginRequiredMixin, View):
 		if (request.POST.get('cli_val')):
 			cliente = self.clientePopulate(cliente=request.POST.get('cli_val'))
 			return JsonResponse(cliente)
+		elif (request.POST.get('prod_pk')):
+			precio = self.precioPopulate(producto=request.POST.get('prod_pk'))
+			return JsonResponse(precio)
 		else:
 			if formCliente.is_valid():
 				cliente = self.clienteNuevo(formCliente=formCliente)

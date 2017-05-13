@@ -60,8 +60,14 @@ $("#id_ruc").keypress(
 
 
 
-$("tr > td > select").change(function(){   
-	makethemath($(this).attr('id'));
+$("tr > td > select").change(function(){  
+	var id =  $(this).attr('id')
+	makethemath(id);
+	id_sel = id.split("-");
+	if (id_sel[2]=='producto')
+	{
+		popu_price(id_sel[1],$(this).val());
+	}
 });
 
 
@@ -85,4 +91,19 @@ function popu_client(v) {
 			$("#id_phone").val(data.phone);
 			$("#id_email").val(data.email);
 		});
+}
+
+function popu_price(id,v) {
+	$.ajax({
+		url: "/facturacion",
+		method: "POST",
+		data: { 
+			csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+			prod_pk: v },
+		dataType: "json",
+		})
+		.done(function( data ) {
+			$("#id_form-"+id+"-precio_uni").val(data.precio);
+		});
+	console.log(v);
 }
