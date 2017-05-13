@@ -36,7 +36,7 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
 			total1=Sum(F('documentodetalle__subtotal'))
 			).annotate(
-			total2=Sum(F('iva')+F('documentodetalle__subtotal'))
+			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
 			)
 		context = {
 			'title': '',
@@ -58,7 +58,7 @@ class ReporteDiario2PDF(LoginRequiredMixin, View):
 		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
 			total1=Sum(F('documentodetalle__subtotal'))
 			).annotate(
-			total2=Sum(F('iva')+F('documentodetalle__subtotal'))
+			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
 			)
 		context = {
 			'title': '',
