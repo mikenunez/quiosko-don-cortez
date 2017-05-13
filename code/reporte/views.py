@@ -44,6 +44,7 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 		
 
 class ReporteDiario2PDF(LoginRequiredMixin, View):
+	login_url 	= '/login'
 	fecha 		= datetime.today()
 
 	def get(self, request, *args, **kwargs):
