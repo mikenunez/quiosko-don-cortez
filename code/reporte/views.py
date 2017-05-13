@@ -20,7 +20,11 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 
 	def get(self, request, *args, **kwargs):
 		form	= FormReporteDiario()
-		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(Sum(F('documentodetalle__subtotal')))
+		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
+			total1=Sum(F('documentodetalle__subtotal'))
+			).annotate(
+			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
+			)
 		context = {
 			'title': '',
 			'description': '',
