@@ -42,7 +42,6 @@ class FacturacionPage(LoginRequiredMixin, View):
 		precio = {
 			'precio': qs_precio.sale_price,
 		}
-		print(qs_precio)
 		return precio
 
 	def clienteNuevo(self, *args, **kwargs):
@@ -108,16 +107,13 @@ class FacturacionPage(LoginRequiredMixin, View):
 				doc_instance.seller = request.user
 				doc_instance.save()
 				det = 0
-				print ("valid: ", formDocCab )
 				for formDocDet in formSetDocDet:
 					if not formDocDet.is_valid():
-						print ("NOOO VALID: ", formDocDet )
 					if formDocDet.is_valid():
 						if (formDocDet.cleaned_data.get('cantidad') or formDocDet.cleaned_data.get('subtotal')):
 							detalle = self.saveDetalles(documento=doc_instance, formDet=formDocDet)
 							detalle.save()
 							det = det + 1
-							print ("########## : ", det )
 				if (det == 0):
 					doc_instance.delete()
 
