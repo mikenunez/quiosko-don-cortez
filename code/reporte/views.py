@@ -20,22 +20,26 @@ class ReporteDiarioPage(LoginRequiredMixin, View):
 	fecha 		= datetime.today()
 	totaldia = Decimal('0.00')
 	def get(self, request, *args, **kwargs):
-		form	= FormReporteDiario()
-		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
-			total1=Sum(F('documentodetalle__subtotal'))
-			).annotate(
-			total2=F('iva')+Sum(F('documentodetalle__subtotal'))
-			)
-		for ventasdia in qs:
-			self.totaldia = self.totaldia + ventasdia.total2
-		context = {
-			'title': '',
-			'description': '',
-			'form': form,
-			'facturas': qs,
-			'totaldia': self.totaldia
-		}
-		return render(request,"reporte_diario.html",context)
+		usuario = request.user
+		if usuario.groups.filter(name='Supervisor').exists():
+			form	= FormReporteDiario()
+			qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
+				total1=Sum(F('documentodetalle__subtotal'))
+				).annotate(
+				total2=F('iva')+Sum(F('documentodetalle__subtotal'))
+				)
+			for ventasdia in qs:
+				self.totaldia = self.totaldia + ventasdia.total2
+			context = {
+				'title': '',
+				'description': '',
+				'form': form,
+				'facturas': qs,
+				'totaldia': self.totaldia
+			}
+			return render(request,"reporte_diario.html",context)
+		else:
+			return HttpResponse("Su usuario no tiene permisos pera ver el reporte.")
 
 	def post(self, request, *args, **kwargs):
 		form	= FormReporteDiario(request.POST)
@@ -65,6 +69,9 @@ class ReporteDiario2PDF(LoginRequiredMixin, View):
 
 	def get(self, request, *args, **kwargs):
 	# Prepare context
+		usuario = request.GET.get('user')
+		grupo = User.objects.filter(username=usuario)
+		print (groups)
 		if request.GET.get('fecha'):
 			self.fecha = request.GET.get('fecha')
 		qs = DocumentoCabecera.objects.filter(created__date=self.fecha).annotate(
