@@ -4,7 +4,7 @@
 {% block pagecontent %}
 	<!-- Main component for a primary marketing message or call to action -->
 	<div class="page-header">
-		<h1>Modulo de Facturación</h1>
+		<h1>Módulo de Facturación</h1>
 	</div>
 	<form id="documento-form" method="post" action="/facturacion">
 	{% csrf_token %}
@@ -21,7 +21,7 @@
 				<h3>QUIOSCO "DON CORTEZ"</h3>
 				<h3>RUC: 0992180021001</h3>
 				<h4>Fecha y Hora: {% now "d/m/Y H:i" %}</h4>
-				<h4>Numero de Autorización: 2604201701200100400008195409921800215</h4>
+				<h4>Número de Autorización: 2604201701200100400008195409921800215</h4>
 				<h4>Direción Matriz: VÍCTOR MANUEL RENDÓN 236 Y PEDRO CARBO</h4>
 			</div>
 				{{ formDocCab|crispy }}

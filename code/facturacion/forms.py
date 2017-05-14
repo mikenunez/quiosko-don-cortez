@@ -3,10 +3,10 @@ from .models import Cliente, Producto, TablaCatalogo, DocumentoCabecera
 
 
 class FormCliente(forms.Form):
-	ruc 		= forms.CharField(max_length=15,)
-	firstname 	= forms.CharField(max_length=50,)
-	lastname 	= forms.CharField(max_length=50,)
-	phone 		= forms.CharField(max_length=20,)
+	ruc 		= forms.CharField(max_length=15, label='Cédula / RUC *')
+	firstname 	= forms.CharField(max_length=50, label='Nombre *')
+	lastname 	= forms.CharField(max_length=50, label='Apellido *')
+	phone 		= forms.CharField(max_length=20, label='Teléfono *')
 	email 		= forms.EmailField(max_length=100,)
 
 

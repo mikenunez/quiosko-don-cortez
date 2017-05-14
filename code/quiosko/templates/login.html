@@ -2,11 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block pagecontent %}
-<h1 class="text-center">Quisko Don Cortez</h1>
-<h3 class="text-center">¡No sabemos lo que vendemos, pero igual lo facturamos!</h3>
+<h1 class="text-center">Quisco Don Cortez</h1>
+<h2 class="text-center">¡No sabemos lo que vendemos, pero igual lo facturamos!</h2>
 <div class="col-md-4 col-md-offset-4">
-    <h2>Login:</h2>
-	<p style="padding:15px" class="bg-info">Debes inciar sesion para usar el sitema de facturación o reportes.</p>
+    <h3 class="text-center">Acceso al sistema</h3>
+	<p style="padding:15px" class="bg-info">Ingresar su usuario y clave para accesar al sistema</p>
     <form method="post" action="/login">
     {% csrf_token %}
         {{ form|crispy }}
