@@ -108,7 +108,6 @@ class FacturacionPage(LoginRequiredMixin, View):
 				doc_instance.save()
 				det = 0
 				for formDocDet in formSetDocDet:
-					if not formDocDet.is_valid():
 					if formDocDet.is_valid():
 						if (formDocDet.cleaned_data.get('cantidad') or formDocDet.cleaned_data.get('subtotal')):
 							detalle = self.saveDetalles(documento=doc_instance, formDet=formDocDet)
