@@ -28,13 +28,16 @@ class FacturacionPage(LoginRequiredMixin, View):
 
 	def clientePopulate(self, *args, **kwargs):
 		qs_cliente = Cliente.objects.filter(ruc=kwargs['cliente']).first()
-		cliente = {
-			'ruc': qs_cliente.ruc,
-			'nombre': qs_cliente.firstname,
-			'apellido': qs_cliente.lastname,
-			'email': qs_cliente.email,
-			'phone': qs_cliente.phone
-		}
+		if qs_cliente:
+			cliente = {
+				'ruc': qs_cliente.ruc,
+				'nombre': qs_cliente.firstname,
+				'apellido': qs_cliente.lastname,
+				'email': qs_cliente.email,
+				'phone': qs_cliente.phone
+			}
+		else:
+			cliente= {}
 		return cliente
 
 	def precioPopulate(self, *args, **kwargs):

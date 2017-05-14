@@ -105,5 +105,29 @@ function popu_price(id,v) {
 		.done(function( data ) {
 			$("#id_form-"+id+"-precio_uni").val(data.precio);
 		});
-	console.log(v);
+}
+
+function clean_forms() {
+	$("#id_ruc").val("");
+	$("#id_firstname").val("");
+	$("#id_lastname").val("");
+	$("#id_phone").val("");
+	$("#id_email").val("");
+	for (var i = 0; i < 10; i++)
+	{
+		$('#id_form-' + i + '-cantidad').val('');
+		$('#id_form-' + i + '-producto').val('');
+		$('#id_form-' + i + '-precio_uni').val('');
+		$('#id_form-' + i + '-iva').val('010100');
+		$('#id_form-' + i + '-descuento').val('0.00');
+		$('#id_form-' + i + '-subtotal').val('');
+	}
+	$("#totales-subtotal-sin-imp").html('0.00');
+	$("#totales-subtotal-14").html('0.00');
+	$("#totales-subtotal-0").html('0.00');
+	$("#totales-descuentos").html('0.00');
+	$("#totales-ice").html('0.00');
+	$("#totales-iva-14").html('0.00');
+	$("#id_iva").val('0.00');
+	$("#totales-total").html('0.00');
 }
