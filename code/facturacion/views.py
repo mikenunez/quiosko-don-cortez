@@ -12,7 +12,6 @@ from .forms import FormDocCabecera, FormDocDetalle, FormCliente
 # Create your views here.
 class FacturacionPage(LoginRequiredMixin, View):
 	login_url = '/login'
-
 	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
 	try:
 		DocNumber	= DocumentoCabecera.objects.last()
