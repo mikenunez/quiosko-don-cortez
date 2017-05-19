@@ -13,17 +13,19 @@ from .forms import FormDocCabecera, FormDocDetalle, FormCliente
 class FacturacionPage(LoginRequiredMixin, View):
 	login_url = '/login'
 	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
-	try:
-		DocNumber	= DocumentoCabecera.objects.last()
-		DocLast 	= DocNumber.docid.split('-')
-		DocLast 	= int(DocLast[2]) + 1
-		DocLast 	= str(DocLast).zfill(9)
-		DocLast		= "001-001-" + DocLast
-		
-	except:
-		DocLast	= '1'.zfill(9)
-		DocLast	= "001-001-" + DocLast
 
+	def lastDoc(self):
+		try:
+			DocNumber	= DocumentoCabecera.objects.last()
+			DocLast 	= DocNumber.docid.split('-')
+			DocLast 	= int(DocLast[2]) + 1
+			DocLast 	= str(DocLast).zfill(9)
+			DocLast		= "001-001-" + DocLast
+		except:
+			DocLast	= '1'.zfill(9)
+			DocLast	= "001-001-" + DocLast
+		return DocLast
+		
 
 	def clientePopulate(self, *args, **kwargs):
 		qs_cliente = Cliente.objects.filter(ruc=kwargs['cliente']).first()
@@ -47,7 +49,6 @@ class FacturacionPage(LoginRequiredMixin, View):
 		return precio
 
 	def clienteNuevo(self, *args, **kwargs):
-		# print (kwargs['formCliente'].cleaned_data.get('ruc'))
 		obj, create = Cliente.objects.update_or_create(
 			ruc = kwargs['formCliente'].cleaned_data.get('ruc'),
 			defaults={
@@ -77,8 +78,9 @@ class FacturacionPage(LoginRequiredMixin, View):
 
 
 	def get(self, request, *args, **kwargs):
+		DocNext = self.lastDoc()
 		formCliente	= FormCliente()
-		formDocCab 	= FormDocCabecera(initial={ 'docid': self.DocLast })
+		formDocCab 	= FormDocCabecera(initial={'docid': DocNext})
 		formSetDocDet 	= self.DocDetFormSet
 		context = {
 			'title': '',
