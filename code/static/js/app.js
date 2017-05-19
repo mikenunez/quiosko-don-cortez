@@ -16,6 +16,10 @@ function makethemath(u){
 	totals[camp][0] = parseFloat(prod_cant * prod_p_u).toFixed(2);
 	totals[camp][1]	= parseFloat($('#id_form-' + camp + '-descuento').val()).toFixed(2);
 	totals[camp][0] = parseFloat(totals[camp][0]) - parseFloat(totals[camp][1]);
+	if (isNaN(prod_iva))
+	{
+		prod_iva = 0;
+	}
 	totals[camp][2]	= parseFloat(totals[camp][0]).toFixed(2) * parseFloat(prod_iva).toFixed(2);
 	totals[camp][3]	= parseFloat(totals[camp][0]) + parseFloat(totals[camp][2]);
 	if (!isNaN(totals[camp][3]))
