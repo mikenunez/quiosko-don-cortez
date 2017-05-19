@@ -79,6 +79,10 @@ $("tr > td > input").on('input',function(){
 	makethemath($(this).attr('id'));
 });
 
+$("tr > td > input").on('change',function(){ 
+	makethemath($(this).attr('id'));
+});
+
 
 function popu_client(v) {
 	$.ajax({
