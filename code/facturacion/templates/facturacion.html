@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% block customheads %}
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+{% endblock %}
 {% block pagecontent %}
 	<!-- Main component for a primary marketing message or call to action -->
 	<div class="page-header">
@@ -41,14 +44,14 @@
 						<thead>
 							<tr>
 								{% for field in form.visible_fields %}
-									<th>{{ field.label|capfirst }}</th>
+									<th class="col-md-2">{{ field.label|capfirst }}</th>
 								{% endfor %}
 							</tr>
 						</thead>
 					{% endif %}
 					<tr>
 						{% for field in form.visible_fields %}
-							<td>
+							<td class="col-md-2">
 								{{ field }}
 							</td>
 						{% endfor %}
@@ -101,4 +104,7 @@
 	<input class="btn btn-success" type="submit" value="Generar Doc.">
 	<a href="/facturacion"><button id="clean_form" class="btn btn-warning" type="button"> Limpiar Formulario</button></a>
 	</form>
+{% endblock %}
+{% block customfooter %}
+<script src="{% static 'js/select2.min.js' %}"></script>
 {% endblock %}

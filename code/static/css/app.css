@@ -9,3 +9,7 @@ text-align:right;
 table > tbody > tr > td > input {
 	text-align: right;
 }
+
+table > tbody > tr > td > select {
+	width: 100%;
+}

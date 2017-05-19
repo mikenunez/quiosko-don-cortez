@@ -115,3 +115,9 @@ function popu_price(id,v) {
 		});
 }
 
+	
+function smartSelect() {
+	$('tr > td:nth-child(2) > select').select2();
+}
+	
+$(document).on('ready',smartSelect());
