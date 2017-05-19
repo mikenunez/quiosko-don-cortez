@@ -1,0 +1,12 @@
+[Unit]
+Description= Quiosko Gunicorn Daemon
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/usr/share/quiosko-don-cortez/code
+ExecStart=/usr/share/quiosko-don-cortez/code/bin/gunicorn --workers 1 --bind unix:/usr/share/quiosko-don-cortez/code/quiosko.sock quiosko.wsgi:application
+
+[Install]
+WantedBy=mutli-user.target

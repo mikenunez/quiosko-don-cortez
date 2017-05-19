@@ -1,5 +1,5 @@
 upstream quiosko {
-  server 127.0.0.1:8000;
+  unix:/usr/share/quiosko-don-cortez/quiosko.sock
 }
 
 server {
@@ -24,3 +24,4 @@ server {
     autoindex on;
     alias /usr/share/quiosko-don-cortez/media_cdn;
   }
+}
