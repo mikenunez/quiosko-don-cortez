@@ -10,8 +10,8 @@ function makethemath(u){
 	total = 0.00;
 	prod_cant = parseInt($('#id_form-' + camp + '-cantidad').val(), 10);
 	prod_p_u = parseFloat($('#id_form-' + camp + '-precio_uni').val()).toFixed(2);
-	prod_iva = parseFloat($('#id_form-' + camp + '-iva').find(":selected").text());
-	prod_iva = parseFloat(prod_iva/100).toFixed(2);
+	prod_iva = parseFloat($('#id_form-' + camp + '-iva').val());
+	prod_iva = parseFloat(parseFloat(prod_iva)/100).toFixed(2);
 	
 	totals[camp][0] = parseFloat(prod_cant * prod_p_u).toFixed(2);
 	totals[camp][1]	= parseFloat($('#id_form-' + camp + '-descuento').val()).toFixed(2);
@@ -112,6 +112,7 @@ function popu_price(id,v) {
 		})
 		.done(function( data ) {
 			$("#id_form-"+id+"-precio_uni").val(data.precio);
+			$("#id_form-"+id+"-iva").val(data.iva);
 		});
 }
 

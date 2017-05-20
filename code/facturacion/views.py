@@ -45,6 +45,7 @@ class FacturacionPage(LoginRequiredMixin, View):
 		qs_precio = Producto.objects.filter(pk=kwargs['producto']).first()
 		precio = {
 			'precio': qs_precio.sale_price,
+			'iva': qs_precio.tablacatalogo.value,
 		}
 		return precio
 
