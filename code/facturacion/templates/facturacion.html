@@ -2,7 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block customheads %}
-<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet" />
 {% endblock %}
 {% block pagecontent %}
 	<!-- Main component for a primary marketing message or call to action -->
@@ -39,23 +39,25 @@
 		<div class="table-responsive">
 			<table class="table">
 				{{ formSetDocDet.management_form }}
-				{% for form in formSetDocDet %}
-					{% if forloop.first %}
-						<thead>
-							<tr>
-								{% for field in form.visible_fields %}
-									<th class="col-md-2">{{ field.label|capfirst }}</th>
-								{% endfor %}
-							</tr>
-						</thead>
-					{% endif %}
+				<thead>
 					<tr>
-						{% for field in form.visible_fields %}
-							<td class="col-md-2">
-								{{ field }}
-							</td>
-						{% endfor %}
+						<th class="col-md-1">Cantidad</th>
+						<th class="col-md-1">Producto</th>
+						<th class="col-md-1">Precio Unit.</th>
+						<th class="col-md-1">IVA %</th>
+						<th class="col-md-1">Descuento</th>
+						<th class="col-md-1">Subtotal</th>
 					</tr>
+				</thead>
+				{% for form in formSetDocDet %}
+				<tr>
+					<td class="col-md-1">{{ form.cantidad }}</td>
+					<td class="col-md-7">{{ form.producto }}</td>
+					<td class="col-md-1">{{ form.precio_uni }}</td>
+					<td class="col-md-1">{{ form.iva }}</td>
+					<td class="col-md-1">{{ form.descuento }}</td>
+					<td class="col-md-1">{{ form.subtotal }}</td>
+				</tr>
 	 			{% endfor %}
 			</table>
 		</div>
@@ -106,5 +108,5 @@
 	</form>
 {% endblock %}
 {% block customfooter %}
-<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-select.min.js' %}"></script>
 {% endblock %}

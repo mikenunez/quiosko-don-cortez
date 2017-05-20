@@ -117,7 +117,9 @@ function popu_price(id,v) {
 
 	
 function smartSelect() {
-	$('tr > td:nth-child(2) > select').select2();
+	$('tr > td:nth-child(2) > select').addClass("selectpicker");
+	$('tr > td:nth-child(2) > select').attr("data-width", "100%");
+	$('tr > td:nth-child(2) > select').attr("data-live-search", "true");
 }
 	
 $(document).on('ready',smartSelect());
