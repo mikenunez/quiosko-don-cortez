@@ -24,5 +24,6 @@ class FormDocDetalle(forms.Form):
 	producto 	= forms.ModelChoiceField(queryset=Producto.objects.all())
 	precio_uni 	= forms.DecimalField(decimal_places=2, max_digits=6, label='Precio Unit.', widget=forms.TextInput(attrs={'size':5}), disabled=False)
 	iva			= forms.IntegerField(required=True, widget=forms.TextInput(attrs={'readonly':'readonly', 'size':5}))
+	iva_code	= forms.ModelChoiceField(queryset=TablaCatalogo.objects.all(), widget=forms.HiddenInput())
 	descuento 	= forms.DecimalField(initial=0.00, decimal_places=2, max_digits=6, widget=forms.TextInput(attrs={'size':5}))
 	subtotal	= forms.DecimalField(decimal_places=2, max_digits=6, disabled=False, widget=forms.TextInput(attrs={'readonly':'readonly', 'size':8}))

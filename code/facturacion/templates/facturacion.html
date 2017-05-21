@@ -49,17 +49,20 @@
 						<th class="col-md-1">Subtotal</th>
 					</tr>
 				</thead>
+				<tbody>
 				{% for form in formSetDocDet %}
 				<tr>
 					<td class="col-md-1">{{ form.cantidad }}</td>
 					<td class="col-md-7">{{ form.producto }}</td>
 					<td class="col-md-1">{{ form.precio_uni }}</td>
-					<td class="col-md-1">{{ form.iva }}</td>
+					<td class="col-md-1">{{ form.iva }}{{ form.iva_code }}</td>
 					<td class="col-md-1">{{ form.descuento }}</td>
 					<td class="col-md-1">{{ form.subtotal }}</td>
 				</tr>
 	 			{% endfor %}
+	 			</tbody>
 			</table>
+			<button id="btn-addForm" class="btn btn-primary" type="button">Agregar Detalle</button>
 		</div>
 	</div>
 	<div class="row">
@@ -72,11 +75,6 @@
 				<div>VALOR ICE</div>
 				<div>VALOR IVA 14%</div>
 				<div>TOTAL</div>
-				<script>
-					document.addEventListener("DOMContentLoaded", function() {
-					makethemath("a-0");
-					});
-				</script>
 			</div>
 			<div class="col-md-6 text-right">
 				<div>
