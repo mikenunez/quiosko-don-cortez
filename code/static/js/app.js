@@ -46,14 +46,12 @@ function makethemath(u){
 	}
 }
 
-
 $("#documento-form").keypress(
     function(event){
      if (event.which == '13') {
         event.preventDefault();
       }
 });
-
 
 $("#id_ruc").keypress(
     function(event){
@@ -62,11 +60,8 @@ $("#id_ruc").keypress(
       }
 });
 
-
-
 $("tr > td > select").change(function(){  
 	var id =  $(this).attr('id')
-	makethemath(id);
 	id_sel = id.split("-");
 	if (id_sel[2]=='producto')
 	{
@@ -74,13 +69,18 @@ $("tr > td > select").change(function(){
 	}
 });
 
-
 $("tr > td > input").on('input',function(){ 
 	makethemath($(this).attr('id'));
 });
 
 $("tr > td > input").on('change',function(){ 
 	makethemath($(this).attr('id'));
+});
+
+$("#btn-addForm").on('click',function(){ 
+	addDetalle($("#id_form-TOTAL_FORMS").val(), function(){
+		setTimeout(smartSelect(),200);
+	});
 });
 
 
@@ -113,14 +113,43 @@ function popu_price(id,v) {
 		.done(function( data ) {
 			$("#id_form-"+id+"-precio_uni").val(data.precio);
 			$("#id_form-"+id+"-iva").val(data.iva);
+			$("#id_form-"+id+"-iva_code").val(data.iva_code);
+			makethemath("a-"+id);
 		});
 }
-
 	
 function smartSelect() {
-	$('tr > td:nth-child(2) > select').addClass("selectpicker");
-	$('tr > td:nth-child(2) > select').attr("data-width", "100%");
-	$('tr > td:nth-child(2) > select').attr("data-live-search", "true");
+	$('tbody > tr:last-child > td:nth-child(2) > select').selectpicker({
+		"container": "body",
+		"liveSearch":"true",
+		"width":"100%"
+	});
 }
-	
+
+var getDrawDetalle = $("tbody>tr:last-child").clone(true);
+function addDetalle(t, callback) {
+	var total = t;
+	var newDetalle = getDrawDetalle.clone(true);
+	newDetalle.find(':input').each(function() {
+		var name = $(this).prop('name').replace('-' + (total-1) + '-','-' + total + '-');
+		var id = 'id_' + name;
+		$(this).attr({'name': name, 'id': id});
+	});
+	newDetalle.find('label').each(function() {
+		var newFor = $(this).prop('for').replace('-' + (total-1) + '-','-' + total + '-');
+		$(this).attr('for', newFor);
+	});
+	newDetalle.find('select').each(function() {
+		var name = $(this).prop('name').replace('-' + (total-1) + '-','-' + total + '-');
+		var id = 'id_' + name;
+		$(this).attr({'name': name, 'id': id}).val('');
+	});
+	total++;
+	$('#id_form-TOTAL_FORMS').val(total);
+	$("tbody").append(newDetalle);
+	getDrawDetalle = newDetalle.clone(true);
+	callback();
+}
+
+$(document).on('ready',makethemath("a-0"));
 $(document).on('ready',smartSelect());
