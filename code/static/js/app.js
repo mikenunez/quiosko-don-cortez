@@ -151,5 +151,12 @@ function addDetalle(t, callback) {
 	callback();
 }
 
-$(document).on('ready',makethemath("a-0"));
+function makethemathAll(forms){
+	for (var i = 0; i < forms; i++)
+	{
+		makethemath("a-"+i);
+	}
+}
+
+$(document).on('ready',makethemathAll($('#id_form-TOTAL_FORMS').val()));
 $(document).on('ready',smartSelect());
