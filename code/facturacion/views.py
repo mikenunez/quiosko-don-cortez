@@ -12,7 +12,7 @@ from .forms import FormDocCabecera, FormDocDetalle, FormCliente
 # Create your views here.
 class FacturacionPage(LoginRequiredMixin, View):
 	login_url = '/login'
-	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=10)
+	DocDetFormSet 	= formset_factory(FormDocDetalle, extra=1)
 
 	def lastDoc(self):
 		try:
@@ -46,6 +46,7 @@ class FacturacionPage(LoginRequiredMixin, View):
 		precio = {
 			'precio': qs_precio.sale_price,
 			'iva': qs_precio.tablacatalogo.value,
+			'iva_code': qs_precio.tablacatalogo.pk,
 		}
 		return precio
 
@@ -71,7 +72,7 @@ class FacturacionPage(LoginRequiredMixin, View):
 			documento=kwargs['documento'],
 			producto=kwargs['formDet'].cleaned_data.get('producto'),
 			cantidad=kwargs['formDet'].cleaned_data.get('cantidad'),
-			tablacatalogo=kwargs['formDet'].cleaned_data.get('iva'),
+			tablacatalogo=kwargs['formDet'].cleaned_data.get('iva_code'),
 			descuento=kwargs['formDet'].cleaned_data.get('descuento'),
 			subtotal=kwargs['formDet'].cleaned_data.get('subtotal'),
 			)
